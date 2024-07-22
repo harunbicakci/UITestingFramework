@@ -21,7 +21,7 @@ Feature: Login
       And click on login button
       Then I validate that "Epic sadface: Username and password do not match any user in this service" message is displayed
 
-
+#Try this scenario to test Scenario Outline, fill the examples table first
     @tag2
     Scenario Outline: User tries with invalid credentials
       Given user navigates to login screen
