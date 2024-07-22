@@ -2,6 +2,7 @@ package testBase;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import utility.ConfigsReader;
 import utility.Constants;
@@ -20,7 +21,14 @@ public class BaseClass {
             case "chrome":
                 System.setProperty("webdriver.chrome.driver", Constants.CHROME_DRIVER_PATH);
                 driver = new ChromeDriver();
+
+//                WebDriverManager.chromedriver().setup();
+                ChromeOptions options = new ChromeOptions();
+                options.addArguments("--remote-allow-origins=*");
+                driver = new ChromeDriver(options);
                 break;
+
+//                break;
             case "firefox" :
                 System.setProperty("webdriver.gecko.driver", Constants.GECKO_DRIVER_PATH);
                 driver = new FirefoxDriver();

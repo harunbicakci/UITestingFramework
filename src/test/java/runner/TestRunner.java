@@ -11,7 +11,7 @@ import io.cucumber.junit.CucumberOptions;
         features = "src/test/resources/features/",
 
         // shows where we can find the implementation regarding the steps in feature files above
-        glue = "stepDefinition",
+        glue = "steps",
 
         // if true, it does not really run the steps. it just check if every step in feature files is defined in code
         dryRun = false,
