@@ -16,6 +16,8 @@ public class MainPage {
     @FindBy(xpath = "//div[@class = 'inventory_item_name']")
     public List<WebElement> itemList;
 
+    @FindBy(id = "mainElement")
+    public WebElement mainDelete;
 
     public MainPage() {
         PageFactory.initElements(BaseClass.driver, this);
