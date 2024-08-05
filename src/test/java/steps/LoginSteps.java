@@ -58,7 +58,6 @@ public class LoginSteps extends CommonMethods{
 
     @Given("user navigates to login screen")
     public void user_navigates_to_login_screen(){
-        //  Write code here that turns the phrase above into concrete actions
 
     }
 
