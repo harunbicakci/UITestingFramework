@@ -10,6 +10,9 @@ import utility.ConfigsReader;
 
 public class LoginSteps extends CommonMethods{
 
+    String newUserEmail = "test9912@gmail.com";
+    String newUserPassword = "CimBom!@2367";
+
     @Given("user navigates to sign in page")
     public void user_navigates_to_sign_in_page(){
         click(loginPage.buttonSignIn);
@@ -20,7 +23,7 @@ public class LoginSteps extends CommonMethods{
         click(loginPage.buttonRegisterYourAccount);
     }
 
-    @Given("user enters valid credentials and data")
+    @When("user enters valid credentials and data")
     public void user_enters_valid_credentials_and_data(){
         sendText(loginPage.firstNameRegister, "TestFirstname99");
         wait(1);
@@ -36,27 +39,32 @@ public class LoginSteps extends CommonMethods{
         wait(1);
         sendText(loginPage.stateRegister, "IL");
         wait(1);
-        click(loginPage.countryRegister);
-        sendText(loginPage.countryRegister, "United States of America");
-        // selectDropdown(loginPage.countryRegister, "United States of America");
+        selectDropdown(loginPage.countryRegister, "United States of America (the)");
         wait(1);
         sendText(loginPage.phoneRegister, "5051234567");
         wait(1);
-        sendText(loginPage.emailRegister, "test9911@gmail.com");
+        sendText(loginPage.emailRegister, newUserEmail);
         wait(1);
-        sendText(loginPage.passwordRegister, "CimBom!@2367");
+        sendText(loginPage.passwordRegister, newUserPassword);
         wait(1);
     }
 
-    @Given("click on register button")
+    @When("click on register button")
     public void click_on_register_button(){
         click(loginPage.buttonSubmitRegister);
+        wait(1);
+        sendText(loginPage.emailLogin, newUserEmail);
+        wait(1);
+        sendText(loginPage.passwordLogin, newUserPassword);
+        wait(1);
+        click(loginPage.buttonLoginToolShop);
     }
 
-    @Given("I validate that user is registered")
+    @Then("I validate that user is registered")
     public void I_validate_that_user_is_registered(){
         String expMyAccount = "My account";
         Assert.assertEquals("ASSERTION COMPELETE = User Created Successfully",mainPage.actualMyAccount.getText(), expMyAccount);
         wait(3);
+
     }
 }
