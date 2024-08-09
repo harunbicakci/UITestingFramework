@@ -10,75 +10,53 @@ import utility.ConfigsReader;
 
 public class LoginSteps extends CommonMethods{
 
-    @When("user enters valid username")
-    public void user_enters_valid_username(){
-        sendText(loginPage.userName, ConfigsReader.getProperty("username"));
+    @Given("user navigates to sign in page")
+    public void user_navigates_to_sign_in_page(){
+        click(loginPage.buttonSignIn);
     }
 
-    @When("user enters valid password")
-    public void user_enters_valid_password(){
-        sendText(loginPage.password, ConfigsReader.getProperty("password"));
+    @When("user clicks to register new account")
+    public void user_clicks_to_register_new_account(){
+        click(loginPage.buttonRegisterYourAccount);
     }
 
-    @When("click on login button")
-    public void click_on_login_button(){
-        click(loginPage.loginBtn);
-        wait(2);
+    @Given("user enters valid credentials and data")
+    public void user_enters_valid_credentials_and_data(){
+        sendText(loginPage.firstNameRegister, "TestFirstname99");
+        wait(1);
+        sendText(loginPage.lastNameRegister, "TestLastName89");
+        wait(1);
+        sendText(loginPage.dobRegister, "04121978");
+        wait(1);
+        sendText(loginPage.addressRegister, "9911 Poinciana Blv");
+        wait(1);
+        sendText(loginPage.postcodeRegister, "32999");
+        wait(1);
+        sendText(loginPage.cityRegister, "Chicago");
+        wait(1);
+        sendText(loginPage.stateRegister, "IL");
+        wait(1);
+        click(loginPage.countryRegister);
+        sendText(loginPage.countryRegister, "United States of America");
+        // selectDropdown(loginPage.countryRegister, "United States of America");
+        wait(1);
+        sendText(loginPage.phoneRegister, "5051234567");
+        wait(1);
+        sendText(loginPage.emailRegister, "test9911@gmail.com");
+        wait(1);
+        sendText(loginPage.passwordRegister, "CimBom!@2367");
+        wait(1);
     }
 
-    @Then("I validate that user is logged in")
-    public void I_validate_that_user_is_logged_in(){
-        Assert.assertTrue(mainPage.appLogo.isDisplayed());
+    @Given("click on register button")
+    public void click_on_register_button(){
+        click(loginPage.buttonSubmitRegister);
     }
 
-    @When("user leaves password empty")
-    public void user_leaves_password_empty() {
-        sendText(loginPage.password, "");
+    @Given("I validate that user is registered")
+    public void I_validate_that_user_is_registered(){
+        String expMyAccount = "My account";
+        Assert.assertEquals("ASSERTION COMPELETE = User Created Successfully",mainPage.actualMyAccount.getText(), expMyAccount);
+        wait(3);
     }
-
-    @Then("I validate that {string} message is displayed")
-    public void i_validate_that_message_is_displayed(String expectedMsg) {
-        String actualMsg = loginPage.errorMsg.getText();
-        Assert.assertEquals("The welcome message is as expected!", expectedMsg, actualMsg);
-    }
-
-    @When("user enters invalid username as {string}")
-    public void user_enters_invalid_username_as(String username) {
-        sendText(loginPage.userName, username);
-    }
-
-    @When("user enters invalid password as {string}")
-    public void user_enters_invalid_password_as(String password) {
-        sendText(loginPage.password, password);
-    }
-
-    // ---------------------------------------------------------------------------------------
-    // ---------------------------------------------------------------------------------------
-    // ---------------------------------------------------------------------------------------
-
-    @Given("user navigates to login screen")
-    public void user_navigates_to_login_screen(){
-
-    }
-
-    @When("user enters valid credentials and clicks login button")
-    public void user_enters_valid_credentials_and_clicks_login_button(){
-
-    }
-
-    @Then("user logs in to application")
-    public void user_logs_in_to_applicstion(){
-
-    }
-
-    @When("user enters invalid combination of (.+) and (.+)")
-    public void user_enters_invalid_combination_of_and(String str1, String str){
-
-    }
-
-    @Then("user gets the (.+)")
-    public void user_gets_the(String str){
-
-    }
-
 }
