@@ -10,8 +10,14 @@ import utility.ConfigsReader;
 
 public class LoginSteps extends CommonMethods{
 
-    String newUserEmail = "test9912@gmail.com";
-    String newUserPassword = "CimBom!@2367";
+    String newUserEmail = "test9902@gmail.com";
+    String newUserPassword = "CimBom!@2467";
+    String invalidEmail = "invalid_email@gmail.com";
+    String invalidPassword = "invalidPassword?123";
+    String emptyEmail = "";
+    String emptyPassword = "";
+    String expectedErrorMessageLoginPage = "Invalid email or password";
+    String actualErrorMessageLoginPage;
 
     @Given("user navigates to sign in page")
     public void user_navigates_to_sign_in_page(){
@@ -67,4 +73,55 @@ public class LoginSteps extends CommonMethods{
         wait(3);
 
     }
+
+    @When("user enters valid username")
+    public void user_enters_valid_username() {
+        sendText(loginPage.emailLogin, newUserEmail);
+        wait(1);
+    }
+
+    @When("user enters invalid password")
+    public void user_enters_invalid_password() {
+        sendText(loginPage.passwordLogin, invalidPassword);
+        wait(1);
+    }
+
+    @When("user clicks on login button")
+    public void user_clicks_on_login_button() {
+        click(loginPage.buttonLoginToolShop);
+        wait(1);
+    }
+
+    @Then("I validate that error message appears")
+    public void i_validate_that_error_message_appears() {
+        actualErrorMessageLoginPage = loginPage.errorInvalidEmailPassword.getText();
+        wait(1);
+        Assert.assertEquals(expectedErrorMessageLoginPage, actualErrorMessageLoginPage);
+        wait(1);
+    }
+
+    @When("user enters invalid username")
+    public void user_enters_invalid_username() {
+        sendText(loginPage.emailLogin, invalidEmail);
+        wait(1);
+    }
+
+    @When("user enters valid password")
+    public void user_enters_valid_password() {
+        sendText(loginPage.passwordLogin, newUserPassword);
+        wait(1);
+    }
+
+    @When("user enters empty username")
+    public void user_enters_empty_username() {
+        sendText(loginPage.passwordLogin, emptyEmail);
+        wait(1);
+    }
+
+    @When("user enters empty password")
+    public void user_enters_empty_password() {
+        sendText(loginPage.passwordLogin, emptyPassword);
+        wait(1);
+    }
+
 }

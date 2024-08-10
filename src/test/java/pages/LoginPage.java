@@ -7,20 +7,6 @@ import testBase.BaseClass;
 
 public class LoginPage extends BaseClass {
 
-    @FindBy(id = "user-name")
-    public WebElement userName;
-
-    @FindBy(id = "password")
-    public WebElement password;
-
-    @FindBy(id = "login-button")
-    public WebElement loginBtn;
-
-    @FindBy(xpath = "//h3 [@data-test='error']")
-    public WebElement errorMsg;
-
-    // -----------------------------------------------------------------------
-
     @FindBy(xpath = "//*[@id='navbarSupportedContent']/ul/li[4]/a")
     public WebElement buttonSignIn;
 
@@ -32,6 +18,9 @@ public class LoginPage extends BaseClass {
 
     @FindBy(xpath = "//input[@type='submit']")
     public WebElement buttonLoginToolShop;
+
+    @FindBy(xpath = "//div[@class='help-block']")
+    public WebElement errorInvalidEmailPassword;
 
     @FindBy(xpath = "//*[contains(text(), 'Register your account')]")
     public WebElement buttonRegisterYourAccount;

@@ -17,7 +17,7 @@ import io.cucumber.junit.CucumberOptions;
         dryRun = false,
 
         // tags is similar to groups in TestNG
-        tags = "@registerNewUser",
+        tags = "@smoke",
 
         monochrome = true,
         plugin = {
