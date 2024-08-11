@@ -10,14 +10,16 @@ import utility.ConfigsReader;
 
 public class LoginSteps extends CommonMethods{
 
-    String newUserEmail = "test9902@gmail.com";
-    String newUserPassword = "CimBom!@2467";
+    String newUserEmail = "test9903@gmail.com";
+    String newUserPassword = "CimBom!@2411";
     String invalidEmail = "invalid_email@gmail.com";
     String invalidPassword = "invalidPassword?123";
     String emptyEmail = "";
     String emptyPassword = "";
     String expectedErrorMessageLoginPage = "Invalid email or password";
     String actualErrorMessageLoginPage;
+    String expectedEmailIsRequiredMessageLoginPage = "Email is required";
+    String expectedPasswprdIsRequiredMessageLoginPAge = "Password is required";
 
     @Given("user navigates to sign in page")
     public void user_navigates_to_sign_in_page(){
@@ -123,5 +125,18 @@ public class LoginSteps extends CommonMethods{
         sendText(loginPage.passwordLogin, emptyPassword);
         wait(1);
     }
+
+    @Then("I validate that email is required error appears")
+    public void I_validate_that_email_is_required_error_appears(){
+        Assert.assertEquals(expectedEmailIsRequiredMessageLoginPage, loginPage.errorEmailIsRequired.getText());
+        wait(1);
+    }
+
+    @Then("I validate that password is required error appears")
+    public void I_validate_that_password_is_required_error_appears(){
+        Assert.assertEquals(expectedPasswprdIsRequiredMessageLoginPAge, loginPage.errorPasswordIsRequired.getText());
+        wait(1);
+    }
+
 
 }

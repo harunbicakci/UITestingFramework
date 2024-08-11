@@ -22,6 +22,12 @@ public class LoginPage extends BaseClass {
     @FindBy(xpath = "//div[@class='help-block']")
     public WebElement errorInvalidEmailPassword;
 
+    @FindBy(xpath = "//*[@id='email-error']/div")
+    public WebElement errorEmailIsRequired;
+
+    @FindBy(xpath = "//*[@id='password-error']/div")
+    public WebElement errorPasswordIsRequired;
+
     @FindBy(xpath = "//*[contains(text(), 'Register your account')]")
     public WebElement buttonRegisterYourAccount;
 

@@ -47,7 +47,7 @@ Background:
     When user enters valid username
     And user enters empty password
     And user clicks on login button
-    Then I validate that error message appears
+    Then I validate that email is required error appears
 
   #5
   @smoke @negative
@@ -55,5 +55,5 @@ Background:
     When user enters valid username
     And user enters invalid password
     And user clicks on login button
-    Then I validate that error message appears
+    Then I validate that password is required error appears
 
