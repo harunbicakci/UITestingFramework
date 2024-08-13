@@ -19,7 +19,7 @@ public class LoginPage extends BaseClass {
     @FindBy(xpath = "//input[@type='submit']")
     public WebElement buttonLoginToolShop;
 
-    @FindBy(xpath = "//div[@class='help-block']")
+    @FindBy(xpath = "/html/body/app-root/div/app-login/div/div/div/form/div[6]/div")
     public WebElement errorInvalidEmailPassword;
 
     @FindBy(xpath = "//*[@id='email-error']/div")
