@@ -2,12 +2,16 @@ package utility;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import jdk.javadoc.internal.doclets.formats.html.markup.Links;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -357,6 +361,43 @@ public class CommonMethods extends PageInitializer {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 
         return sdf.format(date.getTime());
+
+    }
+
+//    Method to find Broken Links
+//    Put in a List
+
+    public static void checkBrokenLink(String linkUrl) {
+
+        try {
+            URL url = new URL(linkUrl);
+            HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection();
+            httpUrlConnection.setConnectTimeout(5000);
+            httpUrlConnection.connect();
+
+            if (httpUrlConnection.getResponseCode() >= 400) {
+                System.out.println(linkUrl + " --> " + httpUrlConnection.getResponseMessage() + " is a BROKEN link!");
+            } else {
+                System.out.println(linkUrl + " --> " + httpUrlConnection.getResponseMessage() + " is NOT BROKEN");
+            }
+
+        } catch (Exception e) {
+
+        }
+    }
+
+
+    public static void getUrlfromHREF() {
+
+        List<WebElement> links = driver.findElements(By.tagName("a"));
+        List<String> urlList = new ArrayList<String>();
+
+        for (WebElement e : links) {
+            String url = e.getAttribute("href");
+//            urlList.add(url);
+            checkBrokenLink(url);
+        }
+
 
     }
 
