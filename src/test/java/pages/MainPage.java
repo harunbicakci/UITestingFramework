@@ -22,7 +22,7 @@ public class MainPage {
     //---------------------------------------------------------------
 
     @FindBy(xpath = "//h1[contains(text(), 'My account')]")
-    public WebElement actualMyAccount;
+    public WebElement mainPageTitle;
 
     @FindBy(xpath = "//a[@routerlink='favorites']")
     public WebElement buttonFavorites;

@@ -7,7 +7,7 @@ import testBase.BaseClass;
 
 public class LoginPage extends BaseClass {
 
-    @FindBy(xpath = "//*[@id='navbarSupportedContent']/ul/li[4]/a")
+    @FindBy(xpath = "//a[@data-test='nav-sign-in']")
     public WebElement buttonSignIn;
 
     @FindBy(id = "email")
@@ -17,7 +17,13 @@ public class LoginPage extends BaseClass {
     public WebElement passwordLogin;
 
     @FindBy(xpath = "//input[@type='submit']")
-    public WebElement buttonLoginToolShop;
+    public WebElement buttonLogin;
+
+    @FindBy(xpath = "/html/body/app-root/div/app-login/div/div/div/h3")
+    public WebElement loginPageTitle;
+
+    @FindBy(xpath = "/html/body/app-root/div/app-register/div/div/div/h3")
+    public WebElement registrationPageTitle;
 
     @FindBy(xpath = "/html/body/app-root/div/app-login/div/div/div/form/div[6]/div")
     public WebElement errorInvalidEmailPassword;
@@ -28,7 +34,7 @@ public class LoginPage extends BaseClass {
     @FindBy(xpath = "//*[@id='password-error']/div")
     public WebElement errorPasswordIsRequired;
 
-    @FindBy(xpath = "//*[contains(text(), 'Register your account')]")
+    @FindBy(xpath = "//a[@data-test='register-link']")
     public WebElement buttonRegisterYourAccount;
 
     @FindBy(id = "first_name")
@@ -40,10 +46,10 @@ public class LoginPage extends BaseClass {
     @FindBy(id = "dob")
     public WebElement dobRegister;
 
-    @FindBy(id = "address")
-    public WebElement addressRegister;
+    @FindBy(id = "street")
+    public WebElement streetRegister;
 
-    @FindBy(id = "postcode")
+    @FindBy(id = "postal_code")
     public WebElement postcodeRegister;
 
     @FindBy(id = "city")

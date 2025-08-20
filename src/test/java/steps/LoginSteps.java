@@ -39,7 +39,7 @@ public class LoginSteps extends CommonMethods{
         wait(1);
         sendText(loginPage.dobRegister, "04121978");
         wait(1);
-        sendText(loginPage.addressRegister, "9911 Poinciana Blv");
+        sendText(loginPage.streetRegister, "9911 Poinciana Blv");
         wait(1);
         sendText(loginPage.postcodeRegister, "32999");
         wait(1);
@@ -65,7 +65,7 @@ public class LoginSteps extends CommonMethods{
         wait(1);
         sendText(loginPage.passwordLogin, newUserPassword);
         wait(1);
-        click(loginPage.buttonLoginToolShop);
+        click(loginPage.buttonLogin);
     }
 
     @Then("I validate that user is registered")
@@ -90,7 +90,7 @@ public class LoginSteps extends CommonMethods{
 
     @When("user clicks on login button")
     public void user_clicks_on_login_button() {
-        click(loginPage.buttonLoginToolShop);
+        click(loginPage.buttonLogin);
         wait(1);
     }
 

@@ -10,7 +10,7 @@ Feature: Login
 Background:
   Given user navigates to sign in page
 
-  @smoke @positive @registerNewUser
+  @smoke @positive @registerNewUser @oneTest
   Scenario: New user registry with valid credentials
     When user clicks to register new account
     And user enters valid credentials and data
