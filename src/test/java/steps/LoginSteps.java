@@ -71,7 +71,7 @@ public class LoginSteps extends CommonMethods{
     @Then("I validate that user is registered")
     public void I_validate_that_user_is_registered(){
         String expMyAccount = "My account";
-        Assert.assertEquals("ASSERTION COMPELETE = User Created Successfully",mainPage.actualMyAccount.getText(), expMyAccount);
+        Assert.assertEquals("ASSERTION COMPELETE = User Created Successfully",mainPage.mainPageTitle.getText(), expMyAccount);
         wait(3);
 
     }

@@ -2,7 +2,7 @@ package testBase;
 
 public class TestData {
 
-    public String testUser1Email = "testUser102@gmail.com";
+    public String testUser1Email = "testUser109@gmail.com";
     public String testUser1Password = "OASJasbfjafqo@123";
     public String testUser1FirstName = "Derek";
     public String testUser1LastName = "Fisher";
