@@ -22,12 +22,6 @@ public class ProductPage extends BaseClass {
     @FindBy(id = "toast-container")
     public WebElement toasterContainer;
 
-//    @FindBy(xpath = "//h5[normalize-space(text())='Combination Pliers']")
-//    public WebElement combinationPliers;
-//
-//    @FindBy(xpath = "//h5[normalize-space(text())='Pliers']")
-//    public WebElement pliers;
-
     @FindBy(xpath = "//a[@data-test='nav-cart']")
     public WebElement cartButton;
 

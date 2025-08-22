@@ -1,10 +1,12 @@
 package steps;
 
+import com.zaxxer.sparsebits.SparseBitSet;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import pages.CartPage;
 import pages.MainPage;
@@ -15,6 +17,7 @@ import utility.CommonMethods;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class End2EndSteps extends CommonMethods {
 
@@ -25,7 +28,7 @@ public class End2EndSteps extends CommonMethods {
     CartPage cartPage = new CartPage();
 
     @When("user clicks on sign in button")
-    public void user_clicks_on_sign_in_button(){
+    public void user_clicks_on_sign_in_button() {
         click(loginPage.buttonSignIn);
     }
 
@@ -65,7 +68,7 @@ public class End2EndSteps extends CommonMethods {
     }
 
     @Then("user is navigated to login page and user logs in")
-    public void user_is_navigated_to_login_page_and_user_logs_in(){
+    public void user_is_navigated_to_login_page_and_user_logs_in() {
         waitForVisibility(loginPage.loginPageTitle);
         Assert.assertEquals("Login", loginPage.loginPageTitle.getText());
         sendText(loginPage.emailLogin, testData.testUser1Email);
@@ -87,13 +90,15 @@ public class End2EndSteps extends CommonMethods {
 
     @When("user clicks on {string} on the product list and adds to cart")
     public void user_clicks_on_on_the_product_list_and_adds_to_cart(String productName) {
-        click(productPage.getProductName(productName));
+        WebElement product = productPage.getProductName(productName);
+        System.out.println("Clicking product: " + product.getText());
+        click(product);
         waitForClickability(productPage.addToCartButton);
         click(productPage.addToCartButton);
     }
 
     @Then("user validates the toaster message {string}")
-    public void user_validates_the_toaster_message(String expectedToasterMessage){
+    public void user_validates_the_toaster_message(String expectedToasterMessage) {
         waitForVisibility(productPage.toasterContainer);
         Assert.assertEquals(expectedToasterMessage, productPage.toastMessage.getText());
         getWaitObject().until(ExpectedConditions.invisibilityOf(productPage.toastMessage));
@@ -108,62 +113,87 @@ public class End2EndSteps extends CommonMethods {
         getWaitObject().until(d -> productPage.getCartQuantity() == expectedQuantity);
 
         int actualQuantity = productPage.getCartQuantity();
-        Assert.assertEquals("====>>> Assertion Failed, Cart quantity does not match expected value",expectedQuantity, actualQuantity);
+        Assert.assertEquals("====>>> Assertion Failed, Cart quantity does not match expected value", expectedQuantity, actualQuantity);
     }
 
     @When("user clicks add to cart button on the product page")
     public void user_clicks_add_to_cart_button_on_the_product_page() {
         click(productPage.cartButton);
         waitForVisibility(cartPage.cartPageTitle);
-        Assert.assertEquals("CART",cartPage.cartPageTitle.getText());
+        Assert.assertEquals("CART", cartPage.cartPageTitle.getText());
         waitForVisibility(cartPage.cartTable);
-        wait(4);
     }
 
     @Then("user validates the cart products and totals")
-    public void user_validates_the_cart_products_and_totals(DataTable expectedProductsTable) {
-
-//                // Convert DataTable to List<Map<String, String>> (columns: Name, Quantity, Price, Total)
-//                List<Map<String, String>> expectedProducts = expectedProductsTable.asMaps(String.class, String.class);
-//
-//                // Get actual products from page
-//                cartPage.waitForCartTable();
-//                List<Map<String, String>> actualProducts = cartPage.getAllProductsData();
-//
-//                // Validate number of products
-//                Assert.assertEquals("Number of products mismatch", expectedProducts.size(), actualProducts.size());
-//
-//                // Validate each product dynamically
-//                for (Map<String, String> expected : expectedProducts) {
-//                    String productName = expected.get("Name").trim();
-//                    Map<String, String> actual = cartPage.getProductDataByName(productName);
-//
-//                    // Validate name
-//                    Assert.assertEquals("Product name mismatch for " + productName, productName, actual.get("name"));
-//
-//                    // Validate quantity
-//                    Assert.assertEquals("Quantity mismatch for " + productName, expected.get("Quantity").trim(), actual.get("quantity"));
-//
-//                    // Validate price (as double for precision)
-//                    double expectedPrice = Double.parseDouble(expected.get("Price").trim());
-//                    double actualPrice = Double.parseDouble(actual.get("price"));
-//                    Assert.assertEquals("Price mismatch for " + productName, expectedPrice, actualPrice, 0.01);
-//
-//                    // Validate line total
-//                    double expectedTotal = Double.parseDouble(expected.get("Total").trim());
-//                    double actualTotal = Double.parseDouble(actual.get("total"));
-//                    Assert.assertEquals("Line total mismatch for " + productName, expectedTotal, actualTotal, 0.01);
-//                }
-//
-//                // Validate grand total
-//                double expectedGrandTotal = expectedProducts.stream()
-//                        .mapToDouble(p -> Double.parseDouble(p.get("Total").trim()))
-//                        .sum();
-//                double actualGrandTotal = cartPage.getGrandTotal();
-//                Assert.assertEquals("Grand total mismatch", expectedGrandTotal, actualGrandTotal, 0.01);
-//
-//                // Optional: Validate calculated total matches displayed
-//                Assert.assertTrue("Grand total integrity check failed", cartPage.isGrandTotalCorrect());
+    public void user_validates_the_cart_products_and_totals(DataTable dataTable) {
+        List<Map<String, String>> expectedProducts = dataTable.asMaps(String.class, String.class);
+        List<Map<String, String>> actualProducts = cartPage.getAllProducts();
+        System.out.println("Expected Products: " + expectedProducts);
+        System.out.println("Actual Products: " + actualProducts);
+        for (Map<String, String> expected : expectedProducts) {
+            String productName = expected.get("Item");
+            if (!productName.equals("Grand Total")) {
+                Map<String, String> actual = cartPage.getProductDataByName(productName);
+                System.out.println("Validating Product: " + productName + ", Actual: " + actual);
+                Assert.assertEquals("Product name mismatch", expected.get("Item"), actual.get("item"));
+                Assert.assertEquals("Quantity mismatch for " + productName, expected.get("Quantity"), actual.get("quantity"));
+                Assert.assertEquals("Price mismatch for " + productName, expected.get("Price"), actual.get("price"));
+                Assert.assertEquals("Total mismatch for " + productName, expected.get("Total"), actual.get("total"));
+            }
+        }
+        double expectedGrandTotal = Double.parseDouble(expectedProducts.stream()
+                .filter(p -> p.get("Item").equals("Grand Total"))
+                .findFirst().get().get("Total"));
+        Assert.assertTrue("Grand total mismatch", cartPage.isGrandTotalCorrect());
+        Assert.assertEquals("Grand total value mismatch", expectedGrandTotal, cartPage.getGrandTotal(), 0.01);
     }
 
+    @When("user clicks checkout button")
+    public void user_click_checkout_button(){
+        click(cartPage.checkoutButton1);
+    }
+
+    @Then("user validates the checkout message and clicks to checkout button")
+    public void user_validates_the_checkout_message_and_clicks_to_checkout_button(){
+        waitForVisibility(cartPage.checkoutMessage);
+        click(cartPage.checkoutButton2);
+    }
+
+    @Then("user validates the billing address and clicks to checkout button")
+    public void user_validates_the_billing_address_and_clicks_to_checkout_button(){
+        waitForVisibility(cartPage.billingAddressTitle);
+        Assert.assertEquals("Street name mismatch", testData.testUser1Street, cartPage.streetInput.getAttribute("value"));
+        Assert.assertEquals("City name mismatch", testData.testUser1City, cartPage.cityInput.getAttribute("value"));
+        Assert.assertEquals("State name mismatch", testData.testUser1State, cartPage.stateInput.getAttribute("value"));
+        Assert.assertEquals("Country name mismatch", testData.testUser1CountryCode, cartPage.countryInput.getAttribute("value"));
+        Assert.assertEquals("Postal Code mismatch", testData.testUser1PostalCode, cartPage.postalCodeInput.getAttribute("value"));
+        click(cartPage.checkoutButton3);
+    }
+
+    @When("user navigates to payment page")
+    public void user_navigates_to_payment_page(){
+        waitForVisibility(cartPage.paymentTitle);
+    }
+
+    @Then("user enters payment method information and clicks confirm")
+    public void user_enters_payment_method_information_and_clicks_confirm(){
+        selectDropdown(cartPage.paymentMethodDropdown, testData.ccPaymentMethod);
+        sendText(cartPage.creditCardNumberInput, testData.ccNo);
+        sendText(cartPage.expirationDateInput, testData.ccExpDate);
+        sendText(cartPage.cvvInput, testData.ccCvv);
+        sendText(cartPage.cardHolderNameInput, testData.ccFullName);
+        click(cartPage.confirmButton);
+    }
+
+    @Then("user validates the {string} message")
+    public void user_validates_the_message(String message){
+        waitForVisibility(cartPage.paymentSuccessfulMessage);
+        Assert.assertEquals(message, cartPage.paymentSuccessfulMessage.getText());
+    }
+
+    @Then("user navigates to home page")
+    public void user_navigates_to_home_page(){
+        click(mainPage.home);
+        wait(4);
+    }
 }

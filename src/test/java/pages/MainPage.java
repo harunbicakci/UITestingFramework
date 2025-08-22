@@ -37,23 +37,11 @@ public class MainPage extends BaseClass{
     @FindBy(xpath = "//a[@routerlink='messages']")
     public WebElement buttonMessages;
 
+    @FindBy(xpath = "//a[@data-test='nav-home']")
+    public WebElement home;
+
     @FindBy(xpath = "//a[@data-test='nav-categories']")
     public WebElement categories;
-
-//    @FindBy(xpath = "//a[text()='Hand Tools']")
-//    public WebElement handToolsCategories;
-//
-//    @FindBy(xpath = "//a[text()='Power Tools']")
-//    public WebElement powerToolsCategories;
-//
-//    @FindBy(xpath = "//a[text()='Other']")
-//    public WebElement OtherCategories;
-//
-//    @FindBy(xpath = "//a[text()='Special Tools']")
-//    public WebElement specialToolCategories;
-//
-//    @FindBy(xpath = "//a[text()='Rentals']")
-//    public WebElement rentalCategories;
 
     public MainPage() {
         PageFactory.initElements(BaseClass.driver, this);

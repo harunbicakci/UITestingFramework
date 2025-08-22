@@ -1,111 +1,155 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import testBase.BaseClass;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import static utility.CommonMethods.waitForVisibility;
 
 public class CartPage extends BaseClass {
 
     @FindBy(xpath = "//li[@class='ng-star-inserted current']/a/div")
     public WebElement cartPageTitle;
 
-    @FindBy(css = "table.table.table-hover")  // Main table
+    @FindBy(css = "table.table.table-hover")
     public WebElement cartTable;
 
-    public CartPage(){
+    @FindBy(css = "tbody tr")
+    public List<WebElement> productRows;
+
+    @FindBy(xpath = "//tfoot//td[@data-test='cart-total']")
+    public WebElement grandTotalElement;
+
+    @FindBy(xpath = "//button[@data-test='proceed-1']")
+    public WebElement checkoutButton1;
+
+    @FindBy(xpath = "//button[@data-test='proceed-2']")
+    public WebElement checkoutButton2;
+
+    @FindBy(xpath = "//button[@data-test='proceed-3']")
+    public WebElement checkoutButton3;
+
+    @FindBy(xpath = "//p[@class='ng-star-inserted']")
+    public WebElement checkoutMessage;
+
+    @FindBy(xpath = "//h3[contains(text(), 'Billing Address')]")
+    public WebElement billingAddressTitle;
+
+    @FindBy(id = "street")
+    public WebElement streetInput;
+
+    @FindBy(id = "city")
+    public WebElement cityInput;
+
+    @FindBy(id = "state")
+    public WebElement stateInput;
+
+    @FindBy(id = "country")
+    public WebElement countryInput;
+
+    @FindBy(id = "postal_code")
+    public WebElement postalCodeInput;
+
+    @FindBy(xpath = "//h3[contains(text(), 'Payment')]")
+    public WebElement paymentTitle;
+
+    @FindBy(id = "payment-method")
+    public WebElement paymentMethodDropdown;
+
+    @FindBy(id = "credit_card_number")
+    public WebElement creditCardNumberInput;
+
+    @FindBy(id = "expiration_date")
+    public WebElement expirationDateInput;
+
+    @FindBy(id = "cvv")
+    public WebElement cvvInput;
+
+    @FindBy(id = "card_holder_name")
+    public WebElement cardHolderNameInput;
+
+    @FindBy(xpath = "//button[@data-test='finish']")
+    public WebElement confirmButton;
+
+    @FindBy(xpath = "//div[@data-test='payment-success-message']")
+    public WebElement paymentSuccessfulMessage;
+
+    public WebElement getValueFromRows(WebElement row, String columnName) {
+        try {
+            switch (columnName.toLowerCase()) {
+                case "item":
+                    // Explicitly target the product-title span within the current row
+                    return row.findElement(By.xpath(".//span[@data-test='product-title']"));
+                case "quantity":
+                    // Target the input element for quantity within the current row
+                    return row.findElement(By.xpath(".//input[@data-test='product-quantity']"));
+                case "price":
+                    // Target the product-price span within the current row
+                    return row.findElement(By.xpath(".//span[@data-test='product-price']"));
+                case "total":
+                    // Target the line-price span within the current row
+                    return row.findElement(By.xpath(".//span[@data-test='line-price']"));
+                default:
+                    throw new IllegalArgumentException("Unknown column name: " + columnName);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to find element for column " + columnName + " in row: " + row.getAttribute("outerHTML"), e);
+        }
+    }
+
+    public CartPage() {
         PageFactory.initElements(driver, this);
     }
 
-}
+    public void waitForCartTable() {
+        waitForVisibility(cartTable);
+    }
 
-//import org.openqa.selenium.By;
-//import org.openqa.selenium.WebDriver;
-//import org.openqa.selenium.WebElement;
-//import org.openqa.selenium.support.FindBy;
-//import org.openqa.selenium.support.PageFactory;
-//import org.openqa.selenium.support.ui.ExpectedConditions;
-//import org.openqa.selenium.support.ui.WebDriverWait;
-//import java.time.Duration;
-//import java.util.ArrayList;
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
-//
-//public class CartPage {
-//    private WebDriver driver;
-//    private WebDriverWait wait;
-//
-//    // Locators
-//
-//    @FindBy(css = "tbody tr")  // All product rows
-//    private List<WebElement> productRows;
-//
-//    @FindBy(xpath = "//tfoot//td[@data-test='cart-total']")  // Grand total
-//    private WebElement grandTotalElement;
-//
-//    // Constructor
-//    public CartPage(WebDriver driver) {
-//        this.driver = driver;
-//        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//        PageFactory.initElements(driver, this);
-//    }
-//
-//    // Wait for table to load
-//    public void waitForCartTable() {
-//        wait.until(ExpectedConditions.visibilityOf(cartTable));
-//    }
-//
-//    // Dynamic method: Get all product data as List<Map<String, String>>
-//    public List<Map<String, String>> getAllProductsData() {
-//        waitForCartTable();
-//        List<Map<String, String>> products = new ArrayList<>();
-//
-//        for (WebElement row : productRows) {
-//            Map<String, String> productData = new HashMap<>();
-//
-//            // Product Name (span with data-test="product-title")
-//            WebElement nameElement = row.findElement(By.cssSelector("span[data-test='product-title']"));
-//            productData.put("name", nameElement.getText().trim());
-//
-//            // Quantity (input with data-test="product-quantity")
-//            WebElement qtyElement = row.findElement(By.cssSelector("input[data-test='product-quantity']"));
-//            productData.put("quantity", qtyElement.getAttribute("value").trim());  // Use getAttribute for input value
-//
-//            // Price (span with data-test="product-price")
-//            WebElement priceElement = row.findElement(By.cssSelector("span[data-test='product-price']"));
-//            productData.put("price", priceElement.getText().trim().replace("$", ""));  // Remove $ for parsing
-//
-//            // Line Total (span with data-test="line-price")
-//            WebElement totalElement = row.findElement(By.cssSelector("span[data-test='line-price']"));
-//            productData.put("total", totalElement.getText().trim().replace("$", ""));
-//
-//            products.add(productData);
-//        }
-//        return products;
-//    }
-//
-//    // Dynamic method: Get data for a specific product by name
-//    public Map<String, String> getProductDataByName(String productName) {
-//        List<Map<String, String>> allProducts = getAllProductsData();
-//        return allProducts.stream()
-//                .filter(p -> p.get("name").equalsIgnoreCase(productName.trim()))
-//                .findFirst()
-//                .orElseThrow(() -> new RuntimeException("Product not found: " + productName));
-//    }
-//
-//    // Get grand total as double
-//    public double getGrandTotal() {
-//        wait.until(ExpectedConditions.visibilityOf(grandTotalElement));
-//        String totalText = grandTotalElement.getText().trim().replace("$", "");
-//        return Double.parseDouble(totalText);
-//    }
-//
-//    // Validate calculated grand total matches displayed (for integrity check)
-//    public boolean isGrandTotalCorrect() {
-//        double calculatedTotal = getAllProductsData().stream()
-//                .mapToDouble(p -> Double.parseDouble(p.get("total")))
-//                .sum();
-//        return Math.abs(calculatedTotal - getGrandTotal()) < 0.01;  // Allow for floating-point precision
-//    }
-//}
+    public List<Map<String, String>> getAllProducts() {
+        waitForCartTable();
+        List<Map<String, String>> products = new ArrayList<>();
+        String[] columns = {"Item", "Quantity", "Price", "Total"};
+
+        for (WebElement row : productRows) {
+            Map<String, String> productData = new HashMap<>();
+            for (String column : columns) {
+                WebElement element = getValueFromRows(row, column);
+                String value = column.equals("Quantity") ? element.getAttribute("value").trim() : element.getText().replace("\u00A0", "").trim();
+                if (column.equals("Price") || column.equals("Total")) {
+                    value = value.replace("$", "").trim();
+                }
+                productData.put(column.toLowerCase(), value);
+                System.out.println("Row: " + row.getAttribute("outerHTML") + ", Column: " + column + ", Value: " + value);
+            }
+            products.add(productData);
+        }
+        System.out.println("Extracted Products: " + products);
+        return products;
+    }
+
+    public Map<String, String> getProductDataByName(String productName) {
+        List<Map<String, String>> allProducts = getAllProducts();
+        return allProducts.stream()
+                .filter(p -> p.get("item").equalsIgnoreCase(productName.trim()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Product not found: " + productName));
+    }
+
+    public double getGrandTotal() {
+        waitForVisibility(grandTotalElement);
+        String totalText = grandTotalElement.getText().trim().replace("$", "");
+        return Double.parseDouble(totalText);
+    }
+
+    public boolean isGrandTotalCorrect() {
+        double calculatedTotal = getAllProducts().stream()
+                .mapToDouble(p -> Double.parseDouble(p.get("total")))
+                .sum();
+        return Math.abs(calculatedTotal - getGrandTotal()) < 0.01;
+    }
+}
