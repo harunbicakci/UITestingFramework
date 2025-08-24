@@ -134,7 +134,7 @@ public class End2EndSteps extends CommonMethods {
             String productName = expected.get("Item");
             if (!productName.equals("Grand Total")) {
                 Map<String, String> actual = cartPage.getProductDataByName(productName);
-                System.out.println("Validating Product: " + productName + ", Actual: " + actual);
+                System.out.println("Validating Product: " + productName + ", Actual: " + actual.get("item"));
                 Assert.assertEquals("Product name mismatch", expected.get("Item"), actual.get("item"));
                 Assert.assertEquals("Quantity mismatch for " + productName, expected.get("Quantity"), actual.get("quantity"));
                 Assert.assertEquals("Price mismatch for " + productName, expected.get("Price"), actual.get("price"));
